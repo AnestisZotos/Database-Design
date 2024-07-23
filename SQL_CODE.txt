@@ -1,0 +1,138 @@
+CREATE TABLE PELATIS (
+  kwdikos_pelath INTEGER  NOT NULL  ,
+  onoma VARCHAR(20)    ,
+  epwnymo VARCHAR(20)    ,
+  patrwnymo VARCHAR(20)    ,
+  polh VARCHAR(20)    ,
+  odos VARCHAR(20)    ,
+  arithmos INTEGER    ,
+  TK INTEGER    ,
+  AT INTEGER    ,
+  AFM INTEGER      ,
+PRIMARY KEY(kwdikos_pelath));
+
+
+
+CREATE TABLE PISTWTIKH (
+  kwdikos_pistwtikhs INTEGER  NOT NULL  ,
+  PIN INTEGER    ,
+  hmeromhnia_lhkshs DATE      ,
+PRIMARY KEY(kwdikos_pistwtikhs));
+
+
+
+CREATE TABLE YPALLHLOS (
+  kwdikos_ypal INTEGER  NOT NULL  ,
+  onoma VARCHAR(20)    ,
+  epwnymo VARCHAR(20)    ,
+  dieythynsh VARCHAR(20)    ,
+  thlefwno INTEGER      ,
+PRIMARY KEY(kwdikos_ypal));
+
+
+
+CREATE TABLE EBANKING (
+  kwdikos_ebanking INTEGER  NOT NULL  ,
+  PELATIS_kwdikos_pelath INTEGER  NOT NULL  ,
+  username VARCHAR(20)    ,
+  password_2 VARCHAR(20)    ,
+  email VARCHAR(20)  NOT NULL    ,
+PRIMARY KEY(kwdikos_ebanking)  ,
+  FOREIGN KEY(PELATIS_kwdikos_pelath)
+    REFERENCES PELATIS(kwdikos_pelath)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION);
+
+
+CREATE INDEX EBANKING_FKIndex1 ON EBANKING (PELATIS_kwdikos_pelath);
+
+
+
+CREATE TABLE THLEFWNA (
+  thlefwno INTEGER  NOT NULL  ,
+  PELATIS_kwdikos_pelath INTEGER  NOT NULL    ,
+PRIMARY KEY(thlefwno, PELATIS_kwdikos_pelath)  ,
+  FOREIGN KEY(PELATIS_kwdikos_pelath)
+    REFERENCES PELATIS(kwdikos_pelath)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION);
+
+
+CREATE INDEX THLEFWNA_FKIndex1 ON THLEFWNA (PELATIS_kwdikos_pelath);
+
+
+
+CREATE TABLE LOGARIASMOS (
+  kwdikos_log INTEGER  NOT NULL  ,
+  PELATIS_kwdikos_pelath INTEGER  NOT NULL  ,
+  eidos VARCHAR(20)    ,
+  ypoloipo INTEGER      ,
+PRIMARY KEY(kwdikos_log)  ,
+  FOREIGN KEY(PELATIS_kwdikos_pelath)
+    REFERENCES PELATIS(kwdikos_pelath)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION);
+
+
+CREATE INDEX LOGARIASMOS_FKIndex1 ON LOGARIASMOS (PELATIS_kwdikos_pelath);
+
+
+
+CREATE TABLE KINHSH (
+  kwdikos_kinhshs INTEGER  NOT NULL  ,
+  LOGARIASMOS_kwdikos_log INTEGER  NOT NULL  ,
+  eidos VARCHAR(20)    ,
+  hmeromhnia DATE    ,
+  poso INTEGER      ,
+PRIMARY KEY(kwdikos_kinhshs, LOGARIASMOS_kwdikos_log)  ,
+  FOREIGN KEY(LOGARIASMOS_kwdikos_log)
+    REFERENCES LOGARIASMOS(kwdikos_log)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION);
+
+
+CREATE INDEX KINHSH_FKIndex1 ON KINHSH (LOGARIASMOS_kwdikos_log);
+
+
+
+CREATE TABLE EXYPHRETEI (
+  PELATIS_kwdikos_pelath INTEGER  NOT NULL  ,
+  YPALLHLOS_kwdikos_ypal INTEGER  NOT NULL  ,
+  hmeromhnia DATE    ,
+  wra TIMESTAMP      ,
+PRIMARY KEY(PELATIS_kwdikos_pelath, YPALLHLOS_kwdikos_ypal)    ,
+  FOREIGN KEY(PELATIS_kwdikos_pelath)
+    REFERENCES PELATIS(kwdikos_pelath)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION,
+  FOREIGN KEY(YPALLHLOS_kwdikos_ypal)
+    REFERENCES YPALLHLOS(kwdikos_ypal)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION);
+
+
+CREATE INDEX PELATIS_has_YPALLHLOS_FKIndex1 ON EXYPHRETEI (PELATIS_kwdikos_pelath);
+CREATE INDEX PELATIS_has_YPALLHLOS_FKIndex2 ON EXYPHRETEI (YPALLHLOS_kwdikos_ypal);
+
+
+
+CREATE TABLE SYNDETHIKE (
+  LOGARIASMOS_kwdikos_log INTEGER  NOT NULL  ,
+  PISTWTIKH_kwdikos_pistwtikhs INTEGER  NOT NULL    ,
+PRIMARY KEY(LOGARIASMOS_kwdikos_log, PISTWTIKH_kwdikos_pistwtikhs)    ,
+  FOREIGN KEY(LOGARIASMOS_kwdikos_log)
+    REFERENCES LOGARIASMOS(kwdikos_log)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION,
+  FOREIGN KEY(PISTWTIKH_kwdikos_pistwtikhs)
+    REFERENCES PISTWTIKH(kwdikos_pistwtikhs)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION);
+
+
+CREATE INDEX LOGARIASMOS_has_PISTWTIKH_FKIndex1 ON SYNDETHIKE (LOGARIASMOS_kwdikos_log);
+CREATE INDEX LOGARIASMOS_has_PISTWTIKH_FKIndex2 ON SYNDETHIKE (PISTWTIKH_kwdikos_pistwtikhs);
+
+
+
+
